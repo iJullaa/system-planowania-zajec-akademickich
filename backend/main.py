@@ -50,4 +50,51 @@ def stworz_wykladowce(wykladowca: schemas.WykladowcaCreate, db: Session = Depend
 @app.get("/wykladowcy/", response_model=List[schemas.WykladowcaResponse])
 def czytaj_wykladowcow(skip: int = 0, limit: int = 100, db: Session = Depends(pobierz_baze)):
     wykladowcy = db.query(models.Wykladowca).offset(skip).limit(limit).all()
-    return wykladowcy
+    return wykladowcy    return wykladowcy
+
+@app.post("/sale/", response_model=schemas.SalaResponse)
+def stworz_sale(sala: schemas.SalaCreate, db: Session = Depends(pobierz_baze)):
+    nowa_sala = models.Sala(
+        nazwa=sala.nazwa,
+        pojemnosc=sala.pojemnosc,
+        czy_komputerowa=sala.czy_komputerowa
+    )
+    db.add(nowa_sala)
+    db.commit()
+    db.refresh(nowa_sala)
+    return nowa_sala
+
+@app.get("/sale/", response_model=List[schemas.SalaResponse])
+def czytaj_sale(db: Session = Depends(pobierz_baze)):
+    return db.query(models.Sala).all()
+
+@app.post("/przedmioty/", response_model=schemas.PrzedmiotResponse)
+def stworz_przedmiot(przedmiot: schemas.PrzedmiotCreate, db: Session = Depends(pobierz_baze)):
+    nowy_przedmiot = models.Przedmiot(
+        nazwa=przedmiot.nazwa,
+        typ=przedmiot.typ
+    )
+    db.add(nowy_przedmiot)
+    db.commit()
+    db.refresh(nowy_przedmiot)
+    return nowy_przedmiot
+
+@app.get("/przedmioty/", response_model=List[schemas.PrzedmiotResponse])
+def czytaj_przedmioty(db: Session = Depends(pobierz_baze)):
+    return db.query(models.Przedmiot).all()
+
+@app.post("/grupy/", response_model=schemas.GrupaResponse)
+def stworz_grupe(grupa: schemas.GrupaCreate, db: Session = Depends(pobierz_baze)):
+    nowa_grupa = models.GrupaStudencka(
+        nazwa=grupa.nazwa,
+        liczba_studentow=grupa.liczba_studentow,
+        kierunek=grupa.kierunek
+    )
+    db.add(nowa_grupa)
+    db.commit()
+    db.refresh(nowa_grupa)
+    return nowa_grupa
+
+@app.get("/grupy/", response_model=List[schemas.GrupaResponse])
+def czytaj_grupy(db: Session = Depends(pobierz_baze)):
+    return db.query(models.GrupaStudencka).all()
