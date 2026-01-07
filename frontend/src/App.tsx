@@ -10,36 +10,49 @@ interface Wykladowca {
 
 function App() {
   const [wykladowcy, setWykladowcy] = useState<Wykladowca[]>([])
+  const [blad, setBlad] = useState<string>("")
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/wykladowcy/')
       .then(response => {
         setWykladowcy(response.data)
-        console.log("Pobrano dane:", response.data)
+        console.log("Dane z backendu:", response.data)
       })
       .catch(error => {
-        console.error("Błąd połączenia z API:", error)
+        console.error("Błąd:", error)
+        setBlad("Nie udało się połączyć z serwerem. Czy backend działa?")
       })
   }, [])
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ padding: "40px", fontFamily: "sans-serif", maxWidth: "800px", margin: "0 auto" }}>
       <h1>System Planowania Zajęć</h1>
-      <h2>Lista Wykładowców (z Bazy Danych)</h2>
+      <hr />
+      
+      <h2>Lista Wykładowców</h2>
+      
+      {blad && <p style={{ color: "red", fontWeight: "bold" }}>⚠️ {blad}</p>}
 
-      {wykladowcy.length === 0 ? (
-        <p>Ładowanie danych lub brak wykładowców...</p>
-      ) : (
-        <ul>
-          {wykladowcy.map((wykladowca) => (
-            <li key={wykladowca.id} style={{ marginBottom: "10px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px" }}>
-              <strong>{wykladowca.tytul_naukowy} {wykladowca.imie} {wykladowca.nazwisko}</strong>
-              <br />
-              <span style={{ fontSize: "0.8em", color: "gray" }}>ID w bazie: {wykladowca.id}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {!blad && wykladowcy.length === 0 && <p>Ładowanie danych...</p>}
+
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {wykladowcy.map((w) => (
+          <li key={w.id} style={{ 
+            background: "#000000ff", 
+            margin: "10px 0", 
+            padding: "15px", 
+            borderRadius: "8px",
+            borderLeft: "5px solid #007bff"
+          }}>
+            <strong style={{ fontSize: "1.2em" }}>
+              {w.tytul_naukowy} {w.imie} {w.nazwisko}
+            </strong>
+            <div style={{ fontSize: "0.8em", color: "#666", marginTop: "5px" }}>
+              ID w bazie: {w.id}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
