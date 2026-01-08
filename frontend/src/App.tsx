@@ -1,60 +1,72 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState } from 'react';
+import ListaWykladowcow from './components/ListaWykladowcow';
 
-interface Wykladowca {
-  id: number;
-  imie: string;
-  nazwisko: string;
-  tytul_naukowy: string;
-}
+type Widok = 'glowny' | 'wykladowcy' | 'sale' | 'przedmioty' | 'grupy' | 'plan';
 
 function App() {
-  const [wykladowcy, setWykladowcy] = useState<Wykladowca[]>([])
-  const [blad, setBlad] = useState<string>("")
+  const [aktualnyWidok, setAktualnyWidok] = useState<Widok>('wykladowcy');
 
-  useEffect(() => {
-    axios.get('http://127.0.0.1:8000/wykladowcy/')
-      .then(response => {
-        setWykladowcy(response.data)
-        console.log("Dane z backendu:", response.data)
-      })
-      .catch(error => {
-        console.error("Błąd:", error)
-        setBlad("Nie udało się połączyć z serwerem. Czy backend działa?")
-      })
-  }, [])
+  const renderujWidok = () => {
+    switch (aktualnyWidok) {
+      case 'wykladowcy':
+        return <ListaWykladowcow />;
+      case 'sale':
+        return <div className="p-8">Panel zarządzania Salami (W BUDOWIE)</div>;
+      case 'przedmioty':
+        return <div className="p-8">Panel zarządzania Przedmiotami (W BUDOWIE)</div>;
+      case 'grupy':
+        return <div className="p-8">Panel zarządzania Grupami (W BUDOWIE)</div>;
+      case 'plan':
+        return <div className="p-8">Wizualizacja planu (GŁÓWNY CEL PRACY)</div>;
+      case 'glowny':
+      default:
+        return <div className="p-8">Witaj w Systemie Planowania Zajęć! Wybierz opcję z menu.</div>;
+    }
+  };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "sans-serif", maxWidth: "800px", margin: "0 auto" }}>
-      <h1>System Planowania Zajęć</h1>
-      <hr />
-      
-      <h2>Lista Wykładowców</h2>
-      
-      {blad && <p style={{ color: "red", fontWeight: "bold" }}>⚠️ {blad}</p>}
-
-      {!blad && wykladowcy.length === 0 && <p>Ładowanie danych...</p>}
-
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {wykladowcy.map((w) => (
-          <li key={w.id} style={{ 
-            background: "#000000ff", 
-            margin: "10px 0", 
-            padding: "15px", 
-            borderRadius: "8px",
-            borderLeft: "5px solid #007bff"
-          }}>
-            <strong style={{ fontSize: "1.2em" }}>
-              {w.tytul_naukowy} {w.imie} {w.nazwisko}
-            </strong>
-            <div style={{ fontSize: "0.8em", color: "#666", marginTop: "5px" }}>
-              ID w bazie: {w.id}
-            </div>
-          </li>
+    <div className="flex h-screen bg-gray-50">
+      <nav className="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
+        <div className="text-2xl font-bold mb-8 text-indigo-400">Scheduler ILP</div>
+        
+        <button className={`p-3 text-left rounded-md transition duration-150 ease-in-out ${aktualnyWidok === 'glowny' ? 'bg-indigo-600' : 'hover:bg-gray-700'}`} onClick={() => setAktualnyWidok('glowny')}>
+          Pulpit Główny
+        </button>
+        <div className="mt-6 mb-2 text-sm font-semibold text-gray-400">Zarządzanie Zasobami</div>
+        
+        {([
+          { key: 'wykladowcy', label: 'Wykładowcy' },
+          { key: 'sale', label: 'Sale' },
+          { key: 'przedmioty', label: 'Przedmioty' },
+          { key: 'grupy', label: 'Grupy Studenckie' },
+        ] as { key: Widok; label: string }[]).map(item => (
+          <button
+            key={item.key}
+            className={`p-3 text-left rounded-md transition duration-150 ease-in-out ${aktualnyWidok === item.key ? 'bg-indigo-600' : 'hover:bg-gray-700'}`}
+            onClick={() => setAktualnyWidok(item.key)}
+          >
+            {item.label}
+          </button>
         ))}
-      </ul>
+        
+        <div className="mt-8 mb-2 text-sm font-semibold text-gray-400">Optymalizacja</div>
+        <button className={`p-3 text-left rounded-md transition duration-150 ease-in-out ${aktualnyWidok === 'plan' ? 'bg-green-600' : 'hover:bg-gray-700'}`} onClick={() => setAktualnyWidok('plan')}>
+          Generuj Plan
+        </button>
+      </nav>
+
+      <main className="flex-1 overflow-y-auto">
+        <header className="bg-white shadow p-4">
+            <h1 className="text-xl font-semibold text-gray-900">
+                {aktualnyWidok === 'glowny' ? 'Pulpit Główny' : `Zarządzanie: ${aktualnyWidok.charAt(0).toUpperCase() + aktualnyWidok.slice(1)}`}
+            </h1>
+        </header>
+        <div className="p-6">
+          {renderujWidok()}
+        </div>
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

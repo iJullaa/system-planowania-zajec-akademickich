@@ -50,7 +50,7 @@ def stworz_wykladowce(wykladowca: schemas.WykladowcaCreate, db: Session = Depend
 @app.get("/wykladowcy/", response_model=List[schemas.WykladowcaResponse])
 def czytaj_wykladowcow(skip: int = 0, limit: int = 100, db: Session = Depends(pobierz_baze)):
     wykladowcy = db.query(models.Wykladowca).offset(skip).limit(limit).all()
-    return wykladowcy    return wykladowcy
+    return wykladowcy
 
 @app.post("/sale/", response_model=schemas.SalaResponse)
 def stworz_sale(sala: schemas.SalaCreate, db: Session = Depends(pobierz_baze)):
