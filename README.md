@@ -14,7 +14,7 @@ Projekt inżynierski realizujący system automatycznego harmonogramowania zaję�
 *   **Framework:** React 18 (Vite)
 *   **Język:** TypeScript
 *   **Komunikacja:** Axios
-*   **UI:** Tailwind CSS (planowane)
+*   **UI:** Tailwind CSS (skonfigurowany)
 
 ##  Instrukcja uruchomienia (Lokalnie)
 
@@ -69,3 +69,4 @@ npm install
 npm run dev
 ```
 *Aplikacja uruchomi się pod adresem: http://localhost:5173*
+
