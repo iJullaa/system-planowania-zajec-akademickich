@@ -1,4 +1,5 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
 interface Wykladowca {
