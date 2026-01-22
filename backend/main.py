@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 
+import solver
 import models
 import schemas
 from database import engine, SessionLocal, Base
@@ -115,3 +116,14 @@ def stworz_zajecia(zajecia: schemas.ZajeciaCreate, db: Session = Depends(pobierz
 @app.get("/zajecia/", response_model=List[schemas.ZajeciaResponse])
 def czytaj_zajecia(db: Session = Depends(pobierz_baze)):
     return db.query(models.Zajecia).all()
+
+@app.post("/generuj-plan/")
+def generuj_plan(db: Session = Depends(pobierz_baze)):
+    wynik = solver.uruchom_harmonogramowanie(db)
+    if wynik["status"] == "error":
+        raise HTTPException(status_code=400, detail=wynik["message"])
+    return wynik
+
+@app.get("/harmonogram/")
+def pobierz_harmonogram(db: Session = Depends(pobierz_baze)):
+    return db.query(models.Rezerwacja).all()

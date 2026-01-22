@@ -57,3 +57,19 @@ class Zajecia(Base):
     przedmiot = relationship("Przedmiot")
     wykladowca = relationship("Wykladowca", back_populates="zajecia")
     grupa = relationship("GrupaStudencka")
+
+
+class Rezerwacja(Base):
+    __tablename__ = "rezerwacje"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    zajecia_id = Column(Integer, ForeignKey("zajecia.id"))
+
+    sala_id = Column(Integer, ForeignKey("sale.id"))
+
+    dzien = Column(String)
+    godzina = Column(String)
+
+    zajecia = relationship("Zajecia")
+    sala = relationship("Sala")
