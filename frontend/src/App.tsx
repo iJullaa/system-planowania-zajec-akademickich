@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ListaWykladowcow from './components/ListaWykladowcow';
 import ListaSal from './components/ListaSal';
+import ListaPrzedmiotow from './components/ListaPrzedmiotow';
 
 type Widok = 'glowny' | 'wykladowcy' | 'sale' | 'przedmioty' | 'grupy' | 'plan';
 
@@ -16,7 +17,8 @@ function App() {
         return <ListaSal />;
 
       case 'przedmioty':
-        return <div className="p-8">Panel zarządzania Przedmiotami (W BUDOWIE)</div>;
+        return <ListaPrzedmiotow />;
+        
       case 'grupy':
         return <div className="p-8">Panel zarządzania Grupami (W BUDOWIE)</div>;
       case 'plan':
