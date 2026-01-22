@@ -3,6 +3,7 @@ import ListaWykladowcow from './components/ListaWykladowcow';
 import ListaSal from './components/ListaSal';
 import ListaPrzedmiotow from './components/ListaPrzedmiotow';
 import ListaGrup from './components/ListaGrup';
+import DefiniowanieZajec from './components/DefiniowanieZajec';
 
 type Widok = 'glowny' | 'wykladowcy' | 'sale' | 'przedmioty' | 'grupy' | 'plan';
 
@@ -22,8 +23,10 @@ function App() {
 
       case 'grupy':
         return <ListaGrup />;
+
       case 'plan':
-        return <div className="p-8">Wizualizacja planu (GŁÓWNY CEL PRACY)</div>;
+        return <DefiniowanieZajec />;
+        
       case 'glowny':
       default:
         return <div className="p-8">Witaj w Systemie Planowania Zajęć! Wybierz opcję z menu.</div>;

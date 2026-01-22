@@ -98,3 +98,20 @@ def stworz_grupe(grupa: schemas.GrupaCreate, db: Session = Depends(pobierz_baze)
 @app.get("/grupy/", response_model=List[schemas.GrupaResponse])
 def czytaj_grupy(db: Session = Depends(pobierz_baze)):
     return db.query(models.GrupaStudencka).all()
+
+@app.post("/zajecia/", response_model=schemas.ZajeciaCreate)
+def stworz_zajecia(zajecia: schemas.ZajeciaCreate, db: Session = Depends(pobierz_baze)):
+    nowe_zajecia = models.Zajecia(
+        przedmiot_id=zajecia.przedmiot_id,
+        wykladowca_id=zajecia.wykladowca_id,
+        grupa_id=zajecia.grupa_id,
+        czas_trwania=zajecia.czas_trwania
+    )
+    db.add(nowe_zajecia)
+    db.commit()
+    db.refresh(nowe_zajecia)
+    return nowe_zajecia
+
+@app.get("/zajecia/", response_model=List[schemas.ZajeciaResponse])
+def czytaj_zajecia(db: Session = Depends(pobierz_baze)):
+    return db.query(models.Zajecia).all()
