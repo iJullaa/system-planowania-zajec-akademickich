@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ListaWykladowcow from './components/ListaWykladowcow';
 import ListaSal from './components/ListaSal';
 import ListaPrzedmiotow from './components/ListaPrzedmiotow';
+import ListaGrup from './components/ListaGrup';
 
 type Widok = 'glowny' | 'wykladowcy' | 'sale' | 'przedmioty' | 'grupy' | 'plan';
 
@@ -18,9 +19,9 @@ function App() {
 
       case 'przedmioty':
         return <ListaPrzedmiotow />;
-        
+
       case 'grupy':
-        return <div className="p-8">Panel zarządzania Grupami (W BUDOWIE)</div>;
+        return <ListaGrup />;
       case 'plan':
         return <div className="p-8">Wizualizacja planu (GŁÓWNY CEL PRACY)</div>;
       case 'glowny':
