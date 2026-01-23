@@ -64,8 +64,8 @@ const WidokPlanu = () => {
     odswiezDane();
   }, []);
 
-  const dniTygodnia = ["Poniedziałek", "Wtorek", "Środa"];
-  const godziny = ["08:00-09:30", "09:45-11:15", "11:30-13:00", "13:15-14:45"];
+  const dniTygodnia = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
+  const godziny = ["08:00-09:30", "09:45-11:15", "11:30-13:00", "13:15-14:45", "15:00-16:30", "16:45-18:15"];
 
   const znajdzZajecia = (dzien: string, godzina: string) => {
     return rezerwacje.filter(r => r.dzien === dzien && r.godzina === godzina);
