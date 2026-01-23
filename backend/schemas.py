@@ -50,5 +50,10 @@ class ZajeciaCreate(BaseModel):
 class ZajeciaResponse(ZajeciaCreate):
     id: int
 
+class EdycjaRezerwacji(BaseModel):
+    nowy_dzien: str
+    nowa_godzina: str
+    nowa_sala_id: int
+
 class Config:
     from_attributes = True

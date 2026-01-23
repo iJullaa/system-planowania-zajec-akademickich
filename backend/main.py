@@ -127,3 +127,33 @@ def generuj_plan(db: Session = Depends(pobierz_baze)):
 @app.get("/harmonogram/")
 def pobierz_harmonogram(db: Session = Depends(pobierz_baze)):
     return db.query(models.Rezerwacja).all()
+
+
+class EdycjaRezerwacji(schemas.BaseModel):
+    nowy_dzien: str
+    nowa_godzina: str
+    nowa_sala_id: int
+
+
+@app.put("/rezerwacje/{rezerwacja_id}")
+def aktualizuj_rezerwacje(rezerwacja_id: int, dane: schemas.EdycjaRezerwacji, db: Session = Depends(pobierz_baze)):
+    rezerwacja = db.query(models.Rezerwacja).filter(models.Rezerwacja.id == rezerwacja_id).first()
+    if not rezerwacja:
+        raise HTTPException(status_code=404, detail="Rezerwacja nie znaleziona")
+
+    # Aktualizacja
+    rezerwacja.dzien = dane.nowy_dzien
+    rezerwacja.godzina = dane.nowa_godzina
+    rezerwacja.sala_id = dane.nowa_sala_id
+
+    db.commit()
+    return {"message": "Zaktualizowano plan"}
+
+
+@app.delete("/rezerwacje/{rezerwacja_id}")
+def usun_rezerwacje(rezerwacja_id: int, db: Session = Depends(pobierz_baze)):
+    rezerwacja = db.query(models.Rezerwacja).filter(models.Rezerwacja.id == rezerwacja_id).first()
+    if rezerwacja:
+        db.delete(rezerwacja)
+        db.commit()
+    return {"message": "Usunięto z planu"}
