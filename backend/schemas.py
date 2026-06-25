@@ -1,5 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
+
+
+class ORMModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
 
 class WykladowcaCreate(BaseModel):
@@ -8,52 +12,51 @@ class WykladowcaCreate(BaseModel):
     tytul_naukowy: Optional[str] = None
 
 
-class WykladowcaResponse(WykladowcaCreate):
+class WykladowcaResponse(WykladowcaCreate, ORMModel):
     id: int
 
-    class Config:
-        from_attributes = True
 
 class SalaCreate(BaseModel):
     nazwa: str
     pojemnosc: int
     czy_komputerowa: bool = False
 
-class SalaResponse(SalaCreate):
+
+class SalaResponse(SalaCreate, ORMModel):
     id: int
-    class Config:
-        from_attributes = True
+
 
 class PrzedmiotCreate(BaseModel):
     nazwa: str
     typ: str
 
-class PrzedmiotResponse(PrzedmiotCreate):
+
+class PrzedmiotResponse(PrzedmiotCreate, ORMModel):
     id: int
-    class Config:
-        from_attributes = True
+
 
 class GrupaCreate(BaseModel):
     nazwa: str
     liczba_studentow: int
     kierunek: str
 
-class GrupaResponse(GrupaCreate):
+
+class GrupaResponse(GrupaCreate, ORMModel):
     id: int
+
 
 class ZajeciaCreate(BaseModel):
     przedmiot_id: int
     wykladowca_id: int
     grupa_id: int
-    czas_trwania: int = 90  # Domyślnie 1.5h (90 min)
+    czas_trwania: int = 90
 
-class ZajeciaResponse(ZajeciaCreate):
+
+class ZajeciaResponse(ZajeciaCreate, ORMModel):
     id: int
+
 
 class EdycjaRezerwacji(BaseModel):
     nowy_dzien: str
     nowa_godzina: str
     nowa_sala_id: int
-
-class Config:
-    from_attributes = True
